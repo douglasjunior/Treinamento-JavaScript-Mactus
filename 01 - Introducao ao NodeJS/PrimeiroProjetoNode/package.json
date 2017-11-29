@@ -1,0 +1,14 @@
+{
+  "name": "primeiroprojetonode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index3.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.19.2"
+  }
+}

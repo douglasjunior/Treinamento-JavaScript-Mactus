@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index3.js"
+    "start": "node --experimental-modules index9.js"
   },
   "author": "",
   "license": "ISC",

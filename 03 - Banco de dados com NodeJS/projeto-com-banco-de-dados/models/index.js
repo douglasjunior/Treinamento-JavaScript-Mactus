@@ -17,13 +17,45 @@ const User = sequelize.define('user', {
         type: Sequelize.BIGINT
     },
     name: Sequelize.STRING(100),
-    username: Sequelize.STRING(40),
-    password: Sequelize.STRING(255),
+    username: {
+        unique: true,
+        type: Sequelize.STRING(40)
+    },
+    password: {
+        allowNull: false,
+        type: Sequelize.STRING(255)
+    },
     birthday: Sequelize.DATEONLY,
+},
+    // {
+    //     defaultScope: {
+    //         attributes: {
+    //             exclude: ['password']
+    //         }
+    //     }
+    // }
+);
+
+const Task = sequelize.define('task', {
+    id: {
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.BIGINT
+    },
+    description: {
+        allowNull: false,
+        type: Sequelize.TEXT
+    }
+})
+
+User.hasMany(Task, {
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
+    foreignKey: 'user_id'
 });
 
-
 module.exports = {
-    sequelize, 
+    sequelize,
     User,
+    Task,
 }

@@ -1,13 +1,85 @@
+const moment = require('moment');
+
 const jwt = require('../utils/jwt');
+const { User, Task, sequelize } = require('../models');
 
 const ctrl = module.exports;
 
-ctrl.createUser = function (request, response) {
-
+ctrl.createUser = function (request, response, next) {
+    const { name, username, password, birthday } = request.body;
+    User.create({
+        name,
+        username,
+        password,
+        birthday: moment(birthday, 'YYYY-MM-DD', true).toDate()
+    }).then(function (user) {
+        response.status(201).json(user);
+    }).catch(function (error) {
+        console.error(error);
+        next(error);
+    })
 };
 
-ctrl.deleteUser = function (request, response) {
+ctrl.returnUserById = function (request, response, next) {
+    const { userId } = request.params;
+    User.findById(userId, {
+        include: [{
+            model: Task,
+            required: true,
+            attributes: ['description']
+        }]
+    }).then(function (user) {
+        if (user) {
+            response.status(200).json(user);
+        } else {
+            response.status(404).send('Usuário não encontrado.');
+        }
+    }).catch(function (error) {
+        console.error(error);
+        next(error);
+    });
+}
 
+ctrl.updateUser = function (request, response, next) {
+    const { userId } = request.params;
+    const { name, password, birthday } = request.body;
+    User.update({
+        name,
+        password,
+        birthday: moment(birthday, 'YYYY-MM-DD', true).toDate()
+    }, {
+            where: {
+                id: userId
+            }
+        }
+    ).then(function (recordsCount) {
+        if (recordsCount[0] > 0) {
+            response.status(204).send();
+        } else {
+            response.status(404).send('Usuário não encontrado');
+        }
+    }).catch(function (error) {
+        console.error(error);
+        next(error);
+    })
+}
+
+ctrl.deleteUser = function (request, response) {
+    const { userId } = request.params;
+    User.destroy({
+        where: {
+            id: userId
+        }
+    }).then(function (recordsCount) {
+        if (recordsCount > 0) {
+            response.status(204).send();
+        } else {
+            response.status(404).send('Usuário não encontrado');
+        }
+    }).catch(function (error) {
+        console.error(error);
+        next(error);
+    })
 };
 
 ctrl.login = function (request, response) {
@@ -44,8 +116,26 @@ ctrl.verifyAuth = function (request, response, next) {
     response.status(400).send("Permissão negada.");
 }
 
-ctrl.returnUser = function (request, response) {
-    response.status(200).json({
-        name: "Douglas"
+ctrl.returnUser = function (request, response, next) {
+    User.findAll({
+        attributes: {
+            exclude: ['password']
+        }
+    }).then(function (users) {
+        response.status(200).json(users);
+    }).catch(function (error) {
+        console.error(error);
+        next(error);
+    })
+}
+
+ctrl.countUsers = function (request, response, next) {
+    User.findAll({
+        attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'count_users']]
+    }).then(function (countUsers) {
+        response.status(200).json(countUsers[0]);
+    }).catch(function (error) {
+        console.error(error);
+        next(error);
     })
 }

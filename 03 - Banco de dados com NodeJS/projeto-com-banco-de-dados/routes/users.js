@@ -5,11 +5,13 @@ const UsersController = require('../controllers/UsersController');
 
 router.post('/login', UsersController.login);
 router.post('/', UsersController.createUser);
-router.delete('/', UsersController.deleteUser);
-router.get('/', UsersController.verifyAuth,
-  UsersController.returnUser)
+router.delete('/:userId', UsersController.deleteUser);
+router.get('/', UsersController.returnUser);
+router.get('/:userId', UsersController.returnUserById);
+router.put('/:userId', UsersController.updateUser);
+router.options('/count', UsersController.countUsers);
 
 module.exports = {
-  router: router,
-  path: '/users'
+    router: router,
+    path: '/users'
 };

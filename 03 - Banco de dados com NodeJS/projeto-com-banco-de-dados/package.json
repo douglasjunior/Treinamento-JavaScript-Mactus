@@ -1,0 +1,23 @@
+{
+  "name": "projeto-com-banco-de-dados",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "cross-env DEBUG=http:* nodemon ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "jsonwebtoken": "^8.1.0",
+    "morgan": "~1.9.0",
+    "sequelize": "^4.28.1",
+    "sqlite3": "^3.1.13"
+  },
+  "devDependencies": {
+    "cross-env": "^5.1.1",
+    "nodemon": "^1.12.5"
+  }
+}

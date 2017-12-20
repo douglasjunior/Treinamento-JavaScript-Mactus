@@ -1,8 +1,10 @@
-const express = require('express');
-const router = express.Router();
+'use strict';
 
-const UsersController = require('../controllers/UsersController');
-const TasksController = require('../controllers/TasksController');
+var express = require('express');
+var router = express.Router();
+
+var UsersController = require('../controllers/UsersController');
+var TasksController = require('../controllers/TasksController');
 
 router.post('/login', UsersController.login);
 
@@ -19,3 +21,4 @@ module.exports = {
     router: router,
     path: '/users'
 };
+//# sourceMappingURL=users.js.map

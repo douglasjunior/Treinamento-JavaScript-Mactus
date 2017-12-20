@@ -1,10 +1,16 @@
 const moment = require('moment');
+import express, { Request, Response } from 'express';
 
 const jwt = require('../utils/jwt');
 const { User, Task, sequelize } = require('../models');
 
 const ctrl = module.exports;
 
+/**
+ * @param {Request} request 
+ * @param {Response} response 
+ * @param {function} next 
+ */
 ctrl.createUser = function (request, response, next) {
     const { name, username, password, birthday } = request.body;
     User.create({
@@ -25,8 +31,7 @@ ctrl.returnUserById = function (request, response, next) {
     User.findById(userId, {
         include: [{
             model: Task,
-            required: true,
-            attributes: ['description']
+            required: false,
         }]
     }).then(function (user) {
         if (user) {
@@ -64,23 +69,42 @@ ctrl.updateUser = function (request, response, next) {
     })
 }
 
-ctrl.deleteUser = function (request, response) {
+ctrl.deleteUser = function (request, response, next) {
     const { userId } = request.params;
-    User.destroy({
-        where: {
-            id: userId
-        }
-    }).then(function (recordsCount) {
+
+    sequelize.transaction(async function (transaction) {
+        await Task.destroy({
+            where: {
+                user_id: userId
+            },
+            transaction
+        });
+
+        const recordsCount = await User.destroy({
+            where: {
+                id: userId
+            },
+            transaction
+        });
+
+        testandoLog(recordsCount);
+
         if (recordsCount > 0) {
             response.status(204).send();
         } else {
             response.status(404).send('Usuário não encontrado');
+            return transaction.rollback();
         }
+
     }).catch(function (error) {
         console.error(error);
         next(error);
     })
 };
+
+function testandoLog(text) {
+    console.log(text)
+}
 
 ctrl.login = function (request, response) {
     const { username, password } = request.body;

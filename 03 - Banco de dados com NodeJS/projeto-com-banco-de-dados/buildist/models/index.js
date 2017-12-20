@@ -1,16 +1,18 @@
-const Sequelize = require('sequelize');
+'use strict';
 
-const sequelize = new Sequelize(null, null, null, {
+var Sequelize = require('sequelize');
+
+var sequelize = new Sequelize(null, null, null, {
     dialect: 'sqlite',
     storage: './banco.sqlite',
     define: {
         freezeTableName: true,
         timestamps: true,
         charset: 'utf8'
-    },
+    }
 });
 
-const User = sequelize.define('user', {
+var User = sequelize.define('user', {
     id: {
         autoIncrement: true,
         primaryKey: true,
@@ -25,18 +27,18 @@ const User = sequelize.define('user', {
         allowNull: false,
         type: Sequelize.STRING(255)
     },
-    birthday: Sequelize.DATEONLY,
-},
-    // {
-    //     defaultScope: {
-    //         attributes: {
-    //             exclude: ['password']
-    //         }
-    //     }
-    // }
+    birthday: Sequelize.DATEONLY
+}
+// {
+//     defaultScope: {
+//         attributes: {
+//             exclude: ['password']
+//         }
+//     }
+// }
 );
 
-const Task = sequelize.define('task', {
+var Task = sequelize.define('task', {
     id: {
         autoIncrement: true,
         primaryKey: true,
@@ -55,7 +57,8 @@ User.hasMany(Task, {
 });
 
 module.exports = {
-    sequelize,
-    User,
-    Task,
-}
+    sequelize: sequelize,
+    User: User,
+    Task: Task
+};
+//# sourceMappingURL=index.js.map

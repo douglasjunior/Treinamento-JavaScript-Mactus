@@ -48,6 +48,10 @@ const USER_VALIDATOR = {
         isLength: {
             options: [{ min: 6, max: 8 }],
         },
+    },
+    cpf: {
+        in: 'body',
+        isCPF: true
     }
 };
 

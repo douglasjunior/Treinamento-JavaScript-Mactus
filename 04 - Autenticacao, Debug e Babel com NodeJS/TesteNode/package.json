@@ -1,0 +1,15 @@
+{
+  "name": "testenode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "total-compra.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch *.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^22.0.3"
+  }
+}

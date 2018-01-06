@@ -18,14 +18,14 @@ const server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-sequelize.sync({ force: false })
-	.then(() => {
+ sequelize.sync({ force: process.env.NODE_ENV === 'test' })
+ 	.then(() => {
 		server.listen(port);
 		server.on('error', onError);
 		server.on('listening', onListening);
-	}).catch(ex => {
-		console.error(ex);
-	})
+	 }).catch(ex => {
+	 	console.error(ex);
+	 })
 
 /**
  * Normalize a port into a number, string, or false.

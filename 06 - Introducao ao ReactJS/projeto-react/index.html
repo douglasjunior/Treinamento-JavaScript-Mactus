@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Projeto React</title>
+
+    <script crossorigin src="https://unpkg.com/react@16.2.0/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16.2.0/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/create-react-class@15.6.2/create-react-class.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script>
+        const ParagrafoComponent = function(props) {
+            return React.createElement('p', {
+                id: 'my-p',
+                style: {
+                    color: 'red'
+                },
+                className: 'center left'
+            }, 'Olá React JS');
+        }
+
+        const CounterComponent = createReactClass({
+            getInitialState: function () {
+                return { counter: this.props.counter };
+            },
+            componentDidMount: function () {
+                const self = this;
+                setInterval(function () {
+                    self.setState({ counter: self.state.counter + 1 })
+                }, 1000);
+            },
+            render: function () {
+                return React.createElement('h1', null, 'Contador: ' + this.state.counter);
+            }
+        })
+
+        const MyP = React.createElement(ParagrafoComponent, null, null);
+
+        const MyCounter = React.createElement(CounterComponent, { counter: 5 }, null);
+
+        const MyDiv = React.createElement('div', null, [MyP, MyCounter]);
+
+        ReactDOM.render(MyDiv, document.getElementById('root'));
+    </script>
+</body>
+
+</html>

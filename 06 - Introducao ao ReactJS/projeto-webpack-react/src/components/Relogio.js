@@ -7,9 +7,13 @@ export default class Relogio extends Component {
     }
 
     componentDidMount() {
-        setInterval(() => {
+        this.interval = setInterval(() => {
             this.setState({ date: new Date() })
         }, this.getRandomArbitrary(500, 1000))
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     getRandomArbitrary(min, max) {

@@ -69,6 +69,7 @@ class SideMenu extends Component {
                 <Menu theme="dark" mode="inline"
                     selectedKeys={[this.props.location.pathname]}
                     defaultSelectedKeys={['/']}>
+
                     {menuItems}
 
                     <Divider />

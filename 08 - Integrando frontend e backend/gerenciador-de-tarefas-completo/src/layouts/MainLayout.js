@@ -26,7 +26,9 @@ export default class MainLayout extends Component {
                             {getUsuario().nome}
                         </span>
                     </Header>
+
                     <ContentRoutes />
+
                 </Layout>
             </Layout>
         )

@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
 
-// import {
-//     FormGroup, Label,
-//     Col, Input,
-//     FormFeedback
-// } from 'reactstrap';
-// import DatePicker from 'react-datepicker';
-
 import { Form, Input, DatePicker } from 'antd';
 
 const FormItem = Form.Item;
@@ -60,17 +53,7 @@ export default class InputForm extends Component {
         let CustomInput;
         if (type === 'date') {
             CustomInput = (
-                //         {/* <DatePicker
-                //             customInput={<Input id={id} valid={valid} style={{ display: 'inline' }} {...others} />}
-                //             dateFormat={dateFormat}
-                //             selected={value}
-                //             useWeekdaysShort={true}
-                //             showMonthDropdown={true}
-                //             showYearDropdown={true}
-                //             isClearable={true}
-                //             onChangeRaw={this.onChange}
-                //             onChange={this.onDateChange} /> */}
-                < DatePicker id={id} onChange={this.onDateChange} format={dateFormat} />
+                <DatePicker id={id} onChange={this.onDateChange} format={dateFormat} />
             )
         } else {
             CustomInput = (

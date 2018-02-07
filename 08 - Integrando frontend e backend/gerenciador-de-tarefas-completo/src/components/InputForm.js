@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 // } from 'reactstrap';
 // import DatePicker from 'react-datepicker';
 
-import { Form, Input } from 'antd';
+import { Form, Input, DatePicker } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -16,6 +16,7 @@ export default class InputForm extends Component {
     state = { valid: null };
 
     onChange = (event) => {
+        console.log(event.target.value);
         const { validator, onChange } = this.props;
         onChange(event);
         if (validator) {
@@ -23,16 +24,17 @@ export default class InputForm extends Component {
         }
     }
 
-    onDateChange = (date) => {
-        const { validator, id, onChange } = this.props;
+    onDateChange = (date, dateString) => {
+        console.log(date, dateString)
+        const { validator, id, onChange, } = this.props;
         onChange({
             target: {
-                value: date,
+                value: dateString,
                 id: id,
             }
         });
         if (validator) {
-            this.setState({ valid: !!validator(date) })
+            this.setState({ valid: !!validator(dateString) })
         }
     }
 
@@ -52,26 +54,24 @@ export default class InputForm extends Component {
     }
 
     render() {
-        const { label, id, errorMessage, type, dateFormat, validator, value, required, onChange, ...others } = this.props;
+        const { label, id, errorMessage, type, dateFormat, validator, value, required, onChange, formItemLayout, ...others } = this.props;
         const { valid } = this.state;
 
         let CustomInput;
         if (type === 'date') {
-            // CustomInput = (
-            //     <Col sm={10}>
-            //         {/* <DatePicker
-            //             customInput={<Input id={id} valid={valid} style={{ display: 'inline' }} {...others} />}
-            //             dateFormat={dateFormat}
-            //             selected={value}
-            //             useWeekdaysShort={true}
-            //             showMonthDropdown={true}
-            //             showYearDropdown={true}
-            //             isClearable={true}
-            //             onChangeRaw={this.onChange}
-            //             onChange={this.onDateChange} /> */}
-            //         <FormFeedback style={{ display: valid === false ? 'inline' : 'none' }}>{errorMessage}</FormFeedback>
-            //     </Col>
-            // )
+            CustomInput = (
+                //         {/* <DatePicker
+                //             customInput={<Input id={id} valid={valid} style={{ display: 'inline' }} {...others} />}
+                //             dateFormat={dateFormat}
+                //             selected={value}
+                //             useWeekdaysShort={true}
+                //             showMonthDropdown={true}
+                //             showYearDropdown={true}
+                //             isClearable={true}
+                //             onChangeRaw={this.onChange}
+                //             onChange={this.onDateChange} /> */}
+                < DatePicker id={id} onChange={this.onDateChange} format={dateFormat} />
+            )
         } else {
             CustomInput = (
                 <Input id={id} valid={valid} value={value} type={type} {...others} onChange={this.onChange} />
@@ -83,6 +83,7 @@ export default class InputForm extends Component {
                 validateStatus={valid === null ? null : valid ? "success" : "error"}
                 help={valid === false ? errorMessage : null}
                 label={label}
+                {...formItemLayout}
             >
                 {CustomInput}
             </FormItem>

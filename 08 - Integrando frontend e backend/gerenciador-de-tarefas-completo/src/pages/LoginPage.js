@@ -2,10 +2,6 @@ import React, { PureComponent } from 'react';
 
 import { Layout, Button } from 'antd';
 import { Redirect } from 'react-router-dom';
-// import {
-//     Button, Container, Form,
-//     FormGroup, Col,
-// } from 'reactstrap';
 import axios from 'axios';
 import { Form, Row, Col } from 'antd';
 
@@ -32,16 +28,12 @@ export default class LoginPage extends PureComponent {
     postLogin = () => {
         const { email, senha } = this.state;
 
-        axios.post("/usuarios/login", {
+        return axios.post("/usuarios/login", {
             email, senha
         }).then(response => {
             console.log(response.status);
-            if (response.status === 200) {
-                saveToken(response.data.token);
-                this.props.history.push('/');
-            } else {
-                alert('Não foi efetuar login, verifique os dados informados e tente novamente.');
-            }
+            saveToken(response.data.token);
+            this.props.history.push('/');
         }).catch(ex => {
             console.error(ex);
             const { response } = ex;
@@ -61,15 +53,12 @@ export default class LoginPage extends PureComponent {
     }
 
     onCadastrarClick = () => {
-        const { history } = this.props;
-        history.push('/cadastro')
+        this.props.history.push('/cadastro')
     }
 
     onInputChange = (event) => {
         const { id, value } = event.target;
-        const state = {};
-        state[id] = value;
-        this.setState(state);
+        this.setState({ [id]: value });
     }
 
     render() {
@@ -80,25 +69,22 @@ export default class LoginPage extends PureComponent {
         const { email, senha } = this.state;
 
         return (
-            <Row align="middle" justify="center">
+            <Form onSubmit={this.onFormSubmit} className="login-page-form">
+                <h3>Efetue login para iniciar.</h3>
 
-                <Form onSubmit={this.onFormSubmit} className="login-page-form">
+                <InputForm label="E-mail" id="email" ref="email" value={email} onChange={this.onInputChange} required={true}
+                    validator={validateEmail} errorMessage="Informe um e-mail válido." />
 
-                    <InputForm label="E-mail" id="email" ref="email" value={email} onChange={this.onInputChange} required={true}
-                        validator={validateEmail} errorMessage="Informe um e-mail válido." />
+                <InputForm label="Senha" id="senha" ref="senha" value={senha} onChange={this.onInputChange} type="password" required={true}
+                    validator={validateSenha} errorMessage="A senha deve conter no mínimo 6 e no máximo 8 caracteres." />
 
-                    <InputForm label="Senha" id="senha" ref="senha" value={senha} onChange={this.onInputChange} type="password" required={true}
-                        validator={validateSenha} errorMessage="A senha deve conter no mínimo 6 e no máximo 8 caracteres." />
-
-                    <FormItem>
-                        <Button type="primary" htmlType="submit" className="login-page-form-button">
-                            Entrar
+                <FormItem style={{ textAlign: 'center' }}>
+                    <Button type="primary" htmlType="submit" className="login-page-form-button">
+                        Entrar
                         </Button>
-                        Ou <a onClick={this.onCadastrarClick}>Cadastre-se agora!</a>
-                    </FormItem>
-                </Form>
-
-            </Row>
+                    Ou <a onClick={this.onCadastrarClick}>Cadastre-se agora!</a>
+                </FormItem>
+            </Form>
         )
     }
 }

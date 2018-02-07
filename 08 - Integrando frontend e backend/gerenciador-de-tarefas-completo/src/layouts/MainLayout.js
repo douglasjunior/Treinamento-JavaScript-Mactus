@@ -9,6 +9,7 @@ import ContentRoutes from './ContentRoutes';
 import PrivateRoute from '../components/PrivateRoute';
 import LoginPage from '../pages/LoginPage';
 import UsuarioPage from '../pages/UsuarioPage';
+import { getUsuario } from '../utils/LoginManager';
 
 const { Header, Content } = Layout;
 
@@ -19,7 +20,12 @@ export default class MainLayout extends Component {
             <Layout className="main-layout">
                 <SideMenu />
                 <Layout>
-                    <Header style={{ background: '#fff', padding: 0 }} />
+                    <Header style={{ background: '#fff', paddingLeft: 16, fontSize: 18 }} >
+                        <Icon type="user" />
+                        <span style={{ marginLeft: 8 }}>
+                            {getUsuario().nome}
+                        </span>
+                    </Header>
                     <ContentRoutes />
                 </Layout>
             </Layout>

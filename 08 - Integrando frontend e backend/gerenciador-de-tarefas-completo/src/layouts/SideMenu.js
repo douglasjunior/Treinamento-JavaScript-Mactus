@@ -1,9 +1,11 @@
 import React, { PureComponent, Component } from 'react';
 
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Divider } from 'antd';
 import { Route, Link, withRouter } from 'react-router-dom';
 
 import './SideMenu.css';
+import { removeToken } from '../utils/LoginManager';
+
 const { Sider } = Layout;
 
 
@@ -33,11 +35,16 @@ class SideMenu extends Component {
         this.setState({ collapsed });
     }
 
+    _logout = () => {
+        removeToken();
+        this.props.history.push('/');
+    }
+
     render() {
         const { collapsed } = this.state;
 
         const menuItems = MENU_ITEMS.map(item => (
-            <Menu.Item key={item.to} style={{ padding: '0px 0px 0px 0px' }}>
+            <Menu.Item key={item.to} >
                 <Link to={item.to}>
                     <Icon type={item.icon} />
                     <span className="nav-text">
@@ -63,6 +70,17 @@ class SideMenu extends Component {
                     selectedKeys={[this.props.location.pathname]}
                     defaultSelectedKeys={['/']}>
                     {menuItems}
+
+                    <Divider />
+
+                    <Menu.Item >
+                        <a onClick={this._logout}>
+                            <Icon type="logout" />
+                            <span className="nav-text">
+                                Sair
+                            </span>
+                        </a>
+                    </Menu.Item >
                 </Menu>
 
             </Sider>

@@ -1,0 +1,10 @@
+.login-page-form {
+    max-width: 300px;
+    margin: 16px auto !important;
+    background-color: rgb(190, 190, 190);
+    padding: 0px 16px !important;
+}
+
+.login-page-form-button {
+    width: 100%;
+}

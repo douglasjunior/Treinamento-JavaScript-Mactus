@@ -21,6 +21,11 @@ module.exports = function (sequelize, DataTypes) {
             unique: true,
             type: DataTypes.STRING(150),
         },
+        cpf: {
+            allowNull: false,
+            unique: true,
+            type: DataTypes.STRING(11),
+        },
         senha: {
             allowNull: false,
             type: DataTypes.BLOB,

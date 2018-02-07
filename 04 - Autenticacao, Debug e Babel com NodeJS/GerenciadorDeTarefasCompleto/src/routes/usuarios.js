@@ -64,6 +64,7 @@ router.post('/',
         const usuario = {
             nome: request.body.nome,
             email: request.body.email,
+            cpf: request.body.cpf,
             nascimento: moment(request.body.nascimento, DATE_FORMAT, true).toDate(),
             senha: bcrypt.hashSync(request.body.senha, SALT_ROUNDS) // criptografa a senha antes de salvar
         };
@@ -156,6 +157,7 @@ router.put('/:usuarioId',
                 if (usuario) {
                     usuario.nome = request.body.nome;
                     usuario.email = request.body.email;
+                    usuario.cpf = request.body.cpf;
                     usuario.nascimento = moment(request.body.nascimento, DATE_FORMAT, true).toDate();
                     usuario.senha = bcrypt.hashSync(request.body.senha, SALT_ROUNDS) // criptografa a senha antes de salvar
                     return usuario.save();

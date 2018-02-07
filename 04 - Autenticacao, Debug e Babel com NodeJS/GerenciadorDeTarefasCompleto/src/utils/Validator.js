@@ -30,8 +30,8 @@ export const customValidators = {
     isDate: function (strDate, format) {
         return moment(strDate, format, true).isValid();
     },
-    isCPF: function(cpf) {
-        return cpf.replace(/[^0-9]/g, '').length === 11;
+    isCPF: function (cpf) {
+        return cpf && cpf.replace(/[^0-9]/g, '').length === 11;
     }
 }
 

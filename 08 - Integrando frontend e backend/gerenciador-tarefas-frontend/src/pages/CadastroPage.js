@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 
-import { Layout, Form, Button, Input } from 'antd';
+import axios from 'axios';
+import moment from 'moment';
+import VMasker from 'vanilla-masker';
+import { Layout, Form, Button } from 'antd';
 
 import InputForm from '../components/InputForm';
+import * as Validators from '../utils/Validators';
+import * as Maskers from '../utils/Maskers';
 
 const FormItem = Form.Item;
 const { Content } = Layout;
@@ -11,6 +16,10 @@ export default class CadastroPage extends Component {
 
     state = {
         nome: '',
+        email: '',
+        cpf: '',
+        nascimento: '',
+        senha: '',
     };
 
     onChange = (event) => {
@@ -20,49 +29,103 @@ export default class CadastroPage extends Component {
         });
     }
 
-    validateNome = (text) => {
-        return text && text.length >= 2;
+    onSubmitForm = (event) => {
+        event.preventDefault();
+
+        if (Validators.isFormValid(this.refs)) {
+            this.requestCadastro();
+        }
     }
 
-    validateEmail = (text) => {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(text.toLowerCase());
+    requestCadastro = () => {
+        const { nome, email, cpf, nascimento, senha } = this.state;
+
+        axios.post('/usuarios', {
+            nome, email, senha, cpf,
+            nascimento: moment(nascimento, 'DD/MM/YYYY').format('YYYY-MM-DD')
+        }).then(response => {
+            console.log('response', response);
+            alert('Usuário cadastrado com sucesso.');
+        }).catch((ex) => {
+            console.error(ex);
+            if (ex.response) {
+                console.error(ex.response);
+                const { status, data } = ex.response;
+                if (status === 412 && data.type === 'unique' &&
+                    data.field === 'email') {
+                    alert('E-mail já cadastrado na base de dados.')
+                } else {
+                    alert('Verifique os dados informados e tente novamente.');
+                }
+            } else {
+                alert('Verifique sua conexão com a internet.');
+            }
+        })
     }
 
     render() {
-        const { nome_valid, email_valid } = this.state;
+        const { nome, email, cpf, nascimento, senha } = this.state;
         return (
             <Content>
 
-                <Form>
+                <Form onSubmit={this.onSubmitForm}>
                     <h3>Informe os dados para cadastro.</h3>
 
                     <InputForm
                         type="text"
                         id="nome"
+                        ref="nome"
                         onChange={this.onChange}
                         label="Nome"
+                        value={nome}
                         errorMessage="Informe o nome do usuário."
-                        validator={this.validateNome} />
+                        validator={Validators.validateNome} />
 
                     <InputForm
                         type="email"
                         id="email"
+                        ref="email"
                         onChange={this.onChange}
                         label="E-mail"
+                        value={email}
                         errorMessage="Informe um endereço de e-mail válido."
-                        validator={this.validateEmail} />
+                        validator={Validators.validateEmail} />
 
-                    <FormItem
-                        validateStatus={"success"}
+                    <InputForm
+                        type="text"
+                        id="cpf"
+                        ref="cpf"
+                        onChange={this.onChange}
+                        label="CPF"
+                        value={cpf}
+                        errorMessage="Informe o CPF com 11 dígitos."
+                        validator={Validators.validateCPF}
+                        masker={Maskers.maskCPF} />
+
+                    <InputForm
+                        type="date"
+                        id="nascimento"
+                        ref="nascimento"
+                        onChange={this.onChange}
+                        value={nascimento}
+                        dateFormat="DD/MM/YYYY"
+                        label="Data de nascimento"
+                        errorMessage="Informe a data de nascimento."
+                        validator={Validators.validateNascimento} />
+
+                    <InputForm
+                        type="password"
+                        id="senha"
+                        ref="senha"
+                        onChange={this.onChange}
+                        value={senha}
                         label="Senha"
-                        help="Informe uma senha com o mínimo de 6 caracteres.">
-                        <Input id="senha" type="password" onChange={this.onChange} />
-                    </FormItem>
+                        errorMessage="Informe sua senha entre 6 e 8 caracteres."
+                        validator={Validators.validateSenha} />
 
                     <FormItem>
 
-                        <Button type="danger">Voltar</Button>
+                        <Button htmlType="button" type="danger">Voltar</Button>
                         {' '}
                         <Button htmlType="submit" type="primary">Salvar</Button>
 

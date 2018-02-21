@@ -72,7 +72,7 @@ export default class LoginPage extends PureComponent {
             <Form onSubmit={this.onFormSubmit} className="login-page-form">
                 <h3>Efetue login para iniciar.</h3>
 
-                <InputForm label="E-mail" id="email" ref="email" value={email} onChange={this.onInputChange} required={true}
+                <InputForm label="E-mail" id="email" ref="email" type="email" value={email} onChange={this.onInputChange} required={true}
                     validator={validateEmail} errorMessage="Informe um e-mail válido." />
 
                 <InputForm label="Senha" id="senha" ref="senha" value={senha} onChange={this.onInputChange} type="password" required={true}

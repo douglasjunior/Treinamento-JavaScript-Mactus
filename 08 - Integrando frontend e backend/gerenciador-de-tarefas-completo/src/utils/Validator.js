@@ -9,8 +9,9 @@ export const validateSenha = (value) => {
     return !!value && value.length >= 6 && value.length <= 8;
 }
 
-export const validateCPF = (value) => {
-    return !!value && value.length == 11;
+export const validateCPF = (value = '') => {
+    const cpf = value.replace(/[^0-9]/g, '');
+    return !!cpf && cpf.length == 11;
 }
 
 export const checkFormIsValid = (refs) => {

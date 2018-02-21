@@ -8,7 +8,7 @@ import SideMenu from './SideMenu';
 import ContentRoutes from './ContentRoutes';
 import PrivateRoute from '../components/PrivateRoute';
 import LoginPage from '../pages/LoginPage';
-import UsuarioPage from '../pages/UsuarioPage';
+import CadastroPage from '../pages/CadastroPage';
 import { getUsuario } from '../utils/LoginManager';
 
 const { Header, Content } = Layout;
@@ -40,7 +40,7 @@ export default class MainLayout extends Component {
 
                 <Route path="/login" component={LoginPage} />
 
-                <Route path="/cadastro" component={UsuarioPage} />
+                <Route path="/cadastro" component={CadastroPage} />
 
                 <PrivateRoute path="/" render={this._renderContent} />
 

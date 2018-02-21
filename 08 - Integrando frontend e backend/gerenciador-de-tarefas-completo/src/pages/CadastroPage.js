@@ -4,9 +4,10 @@ import { Form, Button } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 
-import './UsuarioPage.css';
+import './CadastroPage.css';
 import InputForm from '../components/InputForm';
 import { validateEmail, validateSenha, validateCPF, checkFormIsValid } from '../utils/Validator';
+import { maskCPF, maskDate } from '../utils/Masker';
 
 const FormItem = Form.Item;
 const DATE_FORMAT = 'DD/MM/YYYY';
@@ -35,7 +36,7 @@ const tailFormItemLayout = {
     },
 };
 
-export default class UsuarioPage extends Component {
+export default class CadastroPage extends Component {
 
     state = {
         nome: '',
@@ -61,7 +62,6 @@ export default class UsuarioPage extends Component {
             cpf,
             nascimento: moment(nascimento, DATE_FORMAT).format("YYYY-MM-DD")
         }).then(response => {
-            console.log(response.status);
             if (response.status === 201) {
                 alert('Usuário cadastrado com sucesso!');
                 this.props.history.push('/login');
@@ -108,32 +108,34 @@ export default class UsuarioPage extends Component {
                 <h3>Informe seus dados para cadastro.</h3>
 
                 <InputForm label="Nome" id="nome" ref="nome" value={nome} onChange={this.onInputChange} required={true}
-                    validator={value => !!value && value.length >= 3} errorMessage="O nome é obrigatório."
+                    validator={value => !!value && value.length >= 3} errorMessage="O nome é obrigatório." tabIndex="1"
                 />
 
-                <InputForm label="E-mail" id="email" ref="email" value={email} onChange={this.onInputChange} required={true}
-                    validator={validateEmail} errorMessage="Informe um e-mail válido."
+                <InputForm label="CPF" id="cpf" ref="cpf" value={cpf} onChange={this.onInputChange} required={true}
+                    validator={validateCPF} masker={maskCPF} errorMessage="O CPF deve conter 11 dígitos." tabIndex="2"
+                />
+
+                <InputForm label="Nascimento" id="nascimento" ref="nascimento" value={nascimento} onChange={this.onInputChange} required={true}
+                    type="date" dateFormat={DATE_FORMAT} tabIndex="3"
+                    validator={this.validateNascimento} errorMessage="Informe a data de nascimento no formato dd/mm/aaaa."
+                    onDateSelect={() => this.refs.email.focus()} masker={maskDate}
+                />
+
+                <InputForm label="E-mail" id="email" ref="email" type="email" value={email} onChange={this.onInputChange} required={true}
+                    validator={validateEmail} errorMessage="Informe um e-mail válido." tabIndex="4"
                 />
 
                 <InputForm label="Senha" id="senha" ref="senha" value={senha} onChange={this.onInputChange} required={true}
                     type="password"
                     validator={validateSenha} errorMessage="A senha deve conter no mínimo 6 e no máximo 8 caracteres."
-                />
-
-                <InputForm label="CPF" id="cpf" ref="cpf" value={cpf} onChange={this.onInputChange} required={true}
-                    validator={validateCPF} errorMessage="O CPF deve conter 11 dígitos."
-                />
-
-                <InputForm label="Nascimento" id="nascimento" ref="nascimento" value={nascimento} onChange={this.onInputChange} required={true}
-                    type="date" dateFormat={DATE_FORMAT}
-                    validator={this.validateNascimento} errorMessage="Informe a data de nascimento no formato dd/mm/aaaa."
+                    tabIndex="5"
                 />
 
                 <FormItem>
 
                     <Button type="danger" onClick={this.onCancelarClick} tabIndex={-1} >Cancelar</Button>
                     {' '}
-                    <Button htmlType="submit" type="primary" default>Salvar</Button>
+                    <Button htmlType="submit" type="primary" default tabIndex="6">Salvar</Button>
 
                 </FormItem>
 

@@ -1,34 +1,92 @@
 import React, { Component } from 'react';
 
-import { Form, Input, DatePicker } from 'antd';
+import 'rc-calendar/assets/index.css';
+import 'rc-time-picker/assets/index.css';
+import Calendar from 'rc-calendar';
+import DatePicker from 'rc-calendar/lib/Picker';
+import { Form, Input, Icon, Button } from 'antd';
+import locale from 'rc-calendar/lib/locale/pt_BR';
+import moment from 'moment';
 
+const InputGroup = Input.Group;
 const FormItem = Form.Item;
 
 export default class InputForm extends Component {
 
-    state = { valid: null };
+    state = {
+        valid: null,
+        opened: false,
+        focused: false,
+    };
 
     onChange = (event) => {
-        console.log(event.target.value);
-        const { validator, onChange } = this.props;
-        onChange(event);
-        if (validator) {
-            this.setState({ valid: validator(event.target.value) })
+        const { validator, onChange, masker } = this.props;
+        if (masker) {
+            event.target.value = masker(event.target.value);
         }
+        if (validator) {
+            this.setState({ valid: !!validator(event.target.value) })
+        }
+        onChange(event);
     }
 
-    onDateChange = (date, dateString) => {
-        console.log(date, dateString)
-        const { validator, id, onChange, } = this.props;
+    onDateChange = (date) => {
+        const { validator, id, onChange, dateFormat } = this.props;
+        const dateString = date.format(dateFormat);
+        if (validator) {
+            this.setState({ valid: !!validator(dateString) })
+        }
         onChange({
             target: {
                 value: dateString,
                 id: id,
             }
         });
-        if (validator) {
-            this.setState({ valid: !!validator(dateString) })
+    }
+
+    focus = () => {
+        this.refs.Input.focus();
+    }
+
+    blur = () => {
+        this.refs.Input.blur();
+    }
+
+    onFocus = () => {
+        console.log('onFocus')
+
+    }
+
+    onBlur = () => {
+        console.log('onBlur')
+    }
+
+    onFocusDatePicker = () => {
+        console.log('onFocusDatePicker')
+        if (this.props.autoOpen) {
+            this.setState({ opened: true });
         }
+    }
+
+    onBlurDatePicker = () => {
+        console.log('onBlurDatePicker')
+    }
+
+    onOpenChange = (opened) => {
+        console.log('onOpenChange', opened)
+        this.setState({ opened });
+    }
+
+    onDateSelect = (date) => {
+        console.log('onDateSelect', date)
+        const { onDateSelect } = this.props;
+        if (onDateSelect) {
+            onDateSelect(date);
+        }
+    }
+
+    openDatePicker = () => {
+        this.setState({ opened: true });
     }
 
     isValid = () => {
@@ -47,17 +105,56 @@ export default class InputForm extends Component {
     }
 
     render() {
-        const { label, id, errorMessage, type, dateFormat, validator, value, required, onChange, formItemLayout, ...others } = this.props;
-        const { valid } = this.state;
+        const { label, id, errorMessage, type, dateFormat, validator, masker, value,
+            required, onChange, formItemLayout, tabIndex, placeholder, ...others } = this.props;
+        const { valid, opened, focused } = this.state;
 
         let CustomInput;
         if (type === 'date') {
             CustomInput = (
-                <DatePicker id={id} onChange={this.onDateChange} format={dateFormat} />
+                // <DatePicker id={id} open={opened} onChange={this.onDateChange} format={dateFormat}
+                //     onOpenChange={this.onOpenChange}
+                //     onFocus={this.onFocusDatePicker} onBlur={this.onBlurDatePicker} />
+                <div>
+                    <InputGroup compact>
+                        <Input id={id} value={value}
+                            type="text"
+                            style={{ width: '50%' }}
+                            tabIndex={tabIndex}
+                            onChange={this.onChange}
+                            onFocus={this.onFocusDatePicker} onBlur={this.onBlurDatePicker} ref="Input" />
+                        <Button onClick={this.openDatePicker} type="primary" htmlType="button">
+                            <Icon type="calendar" style={{ color: '#fff' }} />
+                        </Button>
+                    </InputGroup>
+                    <DatePicker
+                        animation="slide-up"
+                        calendar={(
+                            <Calendar
+                                dateInputPlaceholder="please input"
+                                formatter={dateFormat}
+                                showDateInput={false}
+                                autoFocus={false}
+                                onSelect={this.onDateSelect}
+                                locale={locale}
+                            />
+                        )}
+                        onChange={this.onDateChange}
+                        open={opened}
+                        onOpenChange={this.onOpenChange}
+                        autoFocus={false}
+                        value={moment(value, dateFormat)}
+                    >
+                        {() => <span></span>}
+                    </DatePicker>
+                </div>
+
             )
         } else {
             CustomInput = (
-                <Input id={id} valid={valid} value={value} type={type} {...others} onChange={this.onChange} />
+                <Input id={id} value={value} type={type} {...others} onChange={this.onChange}
+                    placeholder={placeholder}
+                    onFocus={this.onFocus} onBlur={this.onBlur} tabIndex={tabIndex} ref="Input" />
             )
         }
 
@@ -65,7 +162,7 @@ export default class InputForm extends Component {
             <FormItem
                 validateStatus={valid === null ? null : valid ? "success" : "error"}
                 help={valid === false ? errorMessage : null}
-                label={label}
+                label={label} placeholder={placeholder}
                 {...formItemLayout}
             >
                 {CustomInput}

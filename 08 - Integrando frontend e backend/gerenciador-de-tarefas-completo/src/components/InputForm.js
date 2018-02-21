@@ -104,25 +104,29 @@ export default class InputForm extends Component {
         return valid;
     }
 
+    stringDateToMoment = (stringDate) => {
+        const date = moment(stringDate, this.props.dateFormat, true);
+        return date && date.isValid() ? date : null;
+    }
+
     render() {
         const { label, id, errorMessage, type, dateFormat, validator, masker, value,
-            required, onChange, formItemLayout, tabIndex, placeholder, ...others } = this.props;
+            required, onChange, formItemLayout, onDateSelect, ...others } = this.props;
         const { valid, opened, focused } = this.state;
 
         let CustomInput;
         if (type === 'date') {
             CustomInput = (
-                // <DatePicker id={id} open={opened} onChange={this.onDateChange} format={dateFormat}
-                //     onOpenChange={this.onOpenChange}
-                //     onFocus={this.onFocusDatePicker} onBlur={this.onBlurDatePicker} />
                 <div>
                     <InputGroup compact>
                         <Input id={id} value={value}
                             type="text"
-                            style={{ width: '50%' }}
-                            tabIndex={tabIndex}
+                            style={{ width: 150 }}
+                            {...others}
                             onChange={this.onChange}
-                            onFocus={this.onFocusDatePicker} onBlur={this.onBlurDatePicker} ref="Input" />
+                            onFocus={this.onFocusDatePicker}
+                            onBlur={this.onBlurDatePicker}
+                            ref="Input" />
                         <Button onClick={this.openDatePicker} type="primary" htmlType="button">
                             <Icon type="calendar" style={{ color: '#fff' }} />
                         </Button>
@@ -143,18 +147,18 @@ export default class InputForm extends Component {
                         open={opened}
                         onOpenChange={this.onOpenChange}
                         autoFocus={false}
-                        value={moment(value, dateFormat)}
+                        value={this.stringDateToMoment(value)}
                     >
                         {() => <span></span>}
                     </DatePicker>
                 </div>
-
             )
         } else {
             CustomInput = (
-                <Input id={id} value={value} type={type} {...others} onChange={this.onChange}
-                    placeholder={placeholder}
-                    onFocus={this.onFocus} onBlur={this.onBlur} tabIndex={tabIndex} ref="Input" />
+                <Input id={id} value={value} type={type}
+                    {...others}
+                    onChange={this.onChange}
+                    onFocus={this.onFocus} onBlur={this.onBlur} ref="Input" />
             )
         }
 
@@ -162,7 +166,7 @@ export default class InputForm extends Component {
             <FormItem
                 validateStatus={valid === null ? null : valid ? "success" : "error"}
                 help={valid === false ? errorMessage : null}
-                label={label} placeholder={placeholder}
+                label={label}
                 {...formItemLayout}
             >
                 {CustomInput}

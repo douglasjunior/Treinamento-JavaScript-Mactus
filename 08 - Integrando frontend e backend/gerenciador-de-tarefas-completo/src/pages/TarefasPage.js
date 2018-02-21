@@ -6,7 +6,7 @@ import axios from 'axios';
 //     InputGroup, Input, InputGroupAddon,
 // } from 'reactstrap';
 
-// import TarefasTable from '../components/TarefasTable';
+import TarefasTable from '../components/TarefasTable';
 // import TarefaForm from '../components/TarefaForm';
 
 export default class TarefasPage extends Component {
@@ -14,7 +14,7 @@ export default class TarefasPage extends Component {
     state = { tarefas: [], showForm: false, tarefaSelecionada: null };
 
     componentDidMount() {
-        // this.getTarefas();
+        this.getTarefas();
     }
 
     getTarefas = (busca = '') => {
@@ -23,11 +23,10 @@ export default class TarefasPage extends Component {
                 titulo: busca
             }
         }).then(response => {
-            if (response.status === 200) {
-                this.setState({
-                    tarefas: response.data
-                })
-            }
+            console.log(response.data);
+            this.setState({
+                tarefas: response.data
+            })
         }).catch(ex => {
             console.error(ex, ex.response);
         })
@@ -140,12 +139,13 @@ export default class TarefasPage extends Component {
                         <Button color='success' onClick={this.onNovaTarefaClick} >Nova Tarefa</Button>
                     </NavItem>
                 </Nav>
-
+                 */}
                 <TarefasTable tarefas={tarefas}
                     onConcluidaChange={this.onConcluidaChange}
                     onExcluirClick={this.onExcluirClick}
                     onEditarClick={this.onEditarClick} />
 
+                {/*
                 <TarefaForm showForm={showForm} tarefa={tarefaSelecionada} onFecharForm={this.closeForm} onSalvarTarefa={this.onSalvarTarefa} /> */}
             </div>
         )

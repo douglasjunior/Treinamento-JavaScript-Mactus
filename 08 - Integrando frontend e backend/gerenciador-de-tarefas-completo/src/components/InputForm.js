@@ -4,8 +4,8 @@ import 'rc-calendar/assets/index.css';
 import 'rc-time-picker/assets/index.css';
 import Calendar from 'rc-calendar';
 import DatePicker from 'rc-calendar/lib/Picker';
-import { Form, Input, Icon, Button } from 'antd';
 import locale from 'rc-calendar/lib/locale/pt_BR';
+import { Form, Input, Icon, Button } from 'antd';
 import moment from 'moment';
 
 const InputGroup = Input.Group;
@@ -52,37 +52,14 @@ export default class InputForm extends Component {
         this.refs.Input.blur();
     }
 
-    onFocus = () => {
-        console.log('onFocus')
-
-    }
-
-    onBlur = () => {
-        console.log('onBlur')
-    }
-
     onFocusDatePicker = () => {
-        console.log('onFocusDatePicker')
         if (this.props.autoOpen) {
             this.setState({ opened: true });
         }
     }
 
-    onBlurDatePicker = () => {
-        console.log('onBlurDatePicker')
-    }
-
     onOpenChange = (opened) => {
-        console.log('onOpenChange', opened)
         this.setState({ opened });
-    }
-
-    onDateSelect = (date) => {
-        console.log('onDateSelect', date)
-        const { onDateSelect } = this.props;
-        if (onDateSelect) {
-            onDateSelect(date);
-        }
     }
 
     openDatePicker = () => {
@@ -125,21 +102,19 @@ export default class InputForm extends Component {
                             {...others}
                             onChange={this.onChange}
                             onFocus={this.onFocusDatePicker}
-                            onBlur={this.onBlurDatePicker}
                             ref="Input" />
-                        <Button onClick={this.openDatePicker} type="primary" htmlType="button">
-                            <Icon type="calendar" style={{ color: '#fff' }} />
+                        <Button onClick={this.openDatePicker} htmlType="button">
+                            <Icon type="calendar" style={{ color: 'rgba(0,0,0,0.4)' }} />
                         </Button>
                     </InputGroup>
                     <DatePicker
                         animation="slide-up"
                         calendar={(
                             <Calendar
-                                dateInputPlaceholder="please input"
                                 formatter={dateFormat}
                                 showDateInput={false}
                                 autoFocus={false}
-                                onSelect={this.onDateSelect}
+                                onSelect={onDateSelect}
                                 locale={locale}
                             />
                         )}
@@ -158,7 +133,7 @@ export default class InputForm extends Component {
                 <Input id={id} value={value} type={type}
                     {...others}
                     onChange={this.onChange}
-                    onFocus={this.onFocus} onBlur={this.onBlur} ref="Input" />
+                    ref="Input" />
             )
         }
 

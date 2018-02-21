@@ -1,6 +1,6 @@
 import React, { PureComponent, Component } from 'react';
 
-import { Layout, Menu, Icon, Divider } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
 import { Route, Link, withRouter } from 'react-router-dom';
 
 import './SideMenu.css';
@@ -71,8 +71,6 @@ class SideMenu extends Component {
                     defaultSelectedKeys={['/']}>
 
                     {menuItems}
-
-                    <Divider />
 
                     <Menu.Item >
                         <a onClick={this._logout}>

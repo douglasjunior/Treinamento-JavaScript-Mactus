@@ -12,30 +12,6 @@ import { maskCPF, maskDate } from '../utils/Masker';
 const FormItem = Form.Item;
 const DATE_FORMAT = 'DD/MM/YYYY';
 
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 10 },
-        sm: { span: 8 },
-    },
-    wrapperCol: {
-        xs: { span: 10 },
-        sm: { span: 16 },
-    },
-};
-
-const tailFormItemLayout = {
-    wrapperCol: {
-        xs: {
-            span: 10,
-            offset: 0,
-        },
-        sm: {
-            span: 16,
-            offset: 8,
-        },
-    },
-};
-
 export default class CadastroPage extends Component {
 
     state = {
@@ -88,9 +64,7 @@ export default class CadastroPage extends Component {
 
     onInputChange = (event) => {
         const { id, value } = event.target;
-        const state = {};
-        state[id] = value;
-        this.setState(state);
+        this.setState({ [id]: value });
     }
 
     onNascimentoChange = (date) => {

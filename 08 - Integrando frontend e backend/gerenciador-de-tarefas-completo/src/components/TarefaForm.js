@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 
-import {
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Button,
-    Form
-} from 'reactstrap';
+// import {
+//     Modal,
+//     ModalHeader,
+//     ModalBody,
+//     ModalFooter,
+//     Button,
+//     Form
+// } from 'reactstrap';
+
+import { Modal } from 'antd';
 
 import InputForm from './InputForm';
 import { checkFormIsValid } from '../utils/Validator';
@@ -28,8 +30,6 @@ export default class TarefaForm extends Component {
     }
 
     onSubmitForm = (event) => {
-        event.preventDefault();
-
         if (checkFormIsValid(this.refs)) {
             this.props.onSalvarTarefa(this.state.tarefa);
         }
@@ -37,29 +37,38 @@ export default class TarefaForm extends Component {
 
     onInputChange = (event) => {
         const { id, value } = event.target;
-        const state = this.state;
-        state.tarefa[id] = value;
-        this.setState(state);
+        this.setState({
+            tarefa: {
+                ...this.state.tarefa,
+                [id]: value
+            }
+        });
     }
 
     render() {
         const { showForm, onFecharForm } = this.props;
         const { tarefa: { id, titulo, descricao }, } = this.state;
         return (
-            <Modal isOpen={showForm} toggle={onFecharForm} className={this.props.className}>
-                <ModalHeader toggle={onFecharForm}>Tarefa</ModalHeader>
-                <Form onSubmit={this.onSubmitForm}>
-                    <ModalBody>
-                        <InputForm label="#" id="id" ref="id" value={id} disabled={true} />
-                        <InputForm label="Título" id="titulo" ref="titulo" value={titulo} onChange={this.onInputChange} required={true}
-                            validator={value => !!value && value.length <= 200} errorMessage="O título é obrigatório." />
-                        <InputForm label="Descrição" id="descricao" ref="descricao" value={descricao} onChange={this.onInputChange} type="textarea" />
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button type='button' color="secondary" onClick={onFecharForm} tabIndex={-1}>Cancelar</Button>{' '}
-                        <Button color="primary">Salvar</Button>
-                    </ModalFooter>
-                </Form>
+            <Modal
+                visible={showForm}
+                onOk={this.onSubmitForm}
+                onCancel={onFecharForm}
+                className={this.props.className}
+                title={`Tarefa`}
+            >
+
+                {id ? (
+                    <InputForm label="#" id="id" ref="id" value={id} disabled={true} />
+                ) : null}
+
+                <InputForm label="Título" id="titulo" ref="titulo" value={titulo}
+                    onChange={this.onInputChange} required
+                    validator={value => !!value && value.length <= 200}
+                    errorMessage="O título é obrigatório e deve ter menos de 200 caracteres." />
+
+                <InputForm type="textarea" label="Descrição" id="descricao" ref="descricao"
+                    value={descricao} onChange={this.onInputChange} />
+
             </Modal>
         )
     }

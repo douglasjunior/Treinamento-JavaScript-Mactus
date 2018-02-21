@@ -1,16 +1,15 @@
 import React, { PureComponent } from 'react';
 
-import { Layout, Button } from 'antd';
+import { Button } from 'antd';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
-import { Form, Row, Col } from 'antd';
+import { Form } from 'antd';
 
 import "./LoginPage.css";
 import InputForm from '../components/InputForm';
 import { isLoggedIn, saveToken } from '../utils/LoginManager';
 import { validateEmail, validateSenha, checkFormIsValid } from '../utils/Validator';
 
-const { Content } = Layout;
 const FormItem = Form.Item;
 
 export default class LoginPage extends PureComponent {
@@ -31,7 +30,6 @@ export default class LoginPage extends PureComponent {
         return axios.post("/usuarios/login", {
             email, senha
         }).then(response => {
-            console.log(response.status);
             saveToken(response.data.token);
             this.props.history.push('/');
         }).catch(ex => {

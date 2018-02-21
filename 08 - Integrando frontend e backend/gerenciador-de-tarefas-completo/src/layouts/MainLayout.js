@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Icon } from 'antd';
 import { Switch, Route } from 'react-router-dom';
 
 import './MainLayout.css';
@@ -11,7 +11,7 @@ import LoginPage from '../pages/LoginPage';
 import CadastroPage from '../pages/CadastroPage';
 import { getUsuario } from '../utils/LoginManager';
 
-const { Header, Content } = Layout;
+const { Header } = Layout;
 
 export default class MainLayout extends Component {
 

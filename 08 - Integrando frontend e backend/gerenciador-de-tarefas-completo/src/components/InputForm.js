@@ -15,8 +15,7 @@ export default class InputForm extends Component {
 
     state = {
         valid: null,
-        opened: false,
-        focused: false,
+        opened: false
     };
 
     onChange = (event) => {
@@ -70,12 +69,13 @@ export default class InputForm extends Component {
         if (!this.props.required)
             return true;
 
-        if (this.state.valid !== null)
-            return this.state.valid;
-
         const { validator, value } = this.props;
         let valid = false;
-        if (validator) valid = !!validator(value);
+        if (validator) {
+            valid = !!validator(value);
+        } else {
+            valid = !!value;
+        }
         this.setState({ valid });
 
         return valid;
@@ -89,7 +89,7 @@ export default class InputForm extends Component {
     render() {
         const { label, id, errorMessage, type, dateFormat, validator, masker, value,
             required, onChange, formItemLayout, onDateSelect, ...others } = this.props;
-        const { valid, opened, focused } = this.state;
+        const { valid, opened } = this.state;
 
         let CustomInput;
         if (type === 'date') {

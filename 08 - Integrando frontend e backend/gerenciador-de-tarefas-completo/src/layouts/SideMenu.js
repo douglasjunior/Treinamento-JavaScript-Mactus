@@ -1,13 +1,12 @@
-import React, { PureComponent, Component } from 'react';
+import React, { Component } from 'react';
 
 import { Layout, Menu, Icon } from 'antd';
-import { Route, Link, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import './SideMenu.css';
 import { removeToken } from '../utils/LoginManager';
 
 const { Sider } = Layout;
-
 
 const MENU_ITEMS = [
     {

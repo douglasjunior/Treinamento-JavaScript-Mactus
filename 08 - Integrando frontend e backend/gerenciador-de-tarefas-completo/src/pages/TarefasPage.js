@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 
+import { Input, Button, Row, Col } from 'antd';
 import axios from 'axios';
-// import {
-//     Nav, NavItem, Button,
-//     InputGroup, Input, InputGroupAddon,
-// } from 'reactstrap';
 
 import TarefasTable from '../components/TarefasTable';
-// import TarefaForm from '../components/TarefaForm';
+import TarefaForm from '../components/TarefaForm';
+
+const { Search } = Input;
 
 export default class TarefasPage extends Component {
 
@@ -23,7 +22,6 @@ export default class TarefasPage extends Component {
                 titulo: busca
             }
         }).then(response => {
-            console.log(response.data);
             this.setState({
                 tarefas: response.data
             })
@@ -122,31 +120,43 @@ export default class TarefasPage extends Component {
         }, 500);
     }
 
+    onBuscaClick = (value) => {
+        this.getTarefas(value)
+    }
+
     render() {
         const { tarefas, showForm, tarefaSelecionada } = this.state;
         return (
             <div>
                 <h2>Tarefas</h2>
 
-                {/* <Nav pills style={{ backgroundColor: '#c0ccff', padding: 8, }}>
-                    <NavItem style={{ flex: 1, marginRight: 8 }}>
-                        <InputGroup>
-                            <InputGroupAddon>Busca</InputGroupAddon>
-                            <Input placeholder="Título da tarefa" onChange={this.onBuscaChange} />
-                        </InputGroup>
-                    </NavItem>
-                    <NavItem>
-                        <Button color='success' onClick={this.onNovaTarefaClick} >Nova Tarefa</Button>
-                    </NavItem>
-                </Nav>
-                 */}
+                <Row>
+                    <Col lg={8} xl={12}>
+                        <Button size="large"
+                            onClick={this.onNovaTarefaClick}
+                            style={{
+                                backgroundColor: '#060',
+                                color: '#fff'
+                            }}
+                        >
+                            Nova tarefa
+                        </Button>
+                    </Col>
+                    <Col lg={16} xl={12}>
+                        <Search placeholder="Pesquisar tarefa" enterButton="Buscar" size="large"
+                            onChange={this.onBuscaChange}
+                            onSearch={this.onBuscaClick} />
+                    </Col>
+                </Row>
+
+                <br /><br />
+
                 <TarefasTable tarefas={tarefas}
                     onConcluidaChange={this.onConcluidaChange}
                     onExcluirClick={this.onExcluirClick}
                     onEditarClick={this.onEditarClick} />
 
-                {/*
-                <TarefaForm showForm={showForm} tarefa={tarefaSelecionada} onFecharForm={this.closeForm} onSalvarTarefa={this.onSalvarTarefa} /> */}
+                <TarefaForm showForm={showForm} tarefa={tarefaSelecionada} onFecharForm={this.closeForm} onSalvarTarefa={this.onSalvarTarefa} />
             </div>
         )
     }

@@ -11,7 +11,7 @@ export const validateSenha = (value) => {
 
 export const validateCPF = (value = '') => {
     const cpf = value.replace(/[^0-9]/g, '');
-    return !!cpf && cpf.length == 11;
+    return !!cpf && cpf.length === 11;
 }
 
 export const checkFormIsValid = (refs) => {

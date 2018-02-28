@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import axios from 'axios';
 import moment from 'moment';
-import VMasker from 'vanilla-masker';
 import { Layout, Form, Button } from 'antd';
 
+import './CadastroPage.css';
 import InputForm from '../components/InputForm';
 import * as Validators from '../utils/Validators';
 import * as Maskers from '../utils/Maskers';
@@ -46,6 +46,7 @@ export default class CadastroPage extends Component {
         }).then(response => {
             console.log('response', response);
             alert('Usuário cadastrado com sucesso.');
+            this.props.history.push('/login');
         }).catch((ex) => {
             console.error(ex);
             if (ex.response) {
@@ -68,7 +69,8 @@ export default class CadastroPage extends Component {
         return (
             <Content>
 
-                <Form onSubmit={this.onSubmitForm}>
+                <Form onSubmit={this.onSubmitForm}
+                    className="cadastro-page-form">
                     <h3>Informe os dados para cadastro.</h3>
 
                     <InputForm

@@ -4,10 +4,10 @@ import axios from 'axios';
 import moment from 'moment';
 import { Layout, Form, Button } from 'antd';
 
-import './CadastroPage.css';
-import InputForm from '../components/InputForm';
-import * as Validators from '../utils/Validators';
-import * as Maskers from '../utils/Maskers';
+import './style.css';
+import InputForm from '../../components/InputForm';
+import * as Validators from '../../utils/Validators';
+import * as Maskers from '../../utils/Maskers';
 
 const FormItem = Form.Item;
 const { Content } = Layout;

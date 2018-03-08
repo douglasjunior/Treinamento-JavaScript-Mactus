@@ -44,7 +44,6 @@ export default class CadastroPage extends Component {
             nome, email, senha, cpf,
             nascimento: moment(nascimento, 'DD/MM/YYYY').format('YYYY-MM-DD')
         }).then(response => {
-            console.log('response', response);
             alert('Usuário cadastrado com sucesso.');
             this.props.history.push('/login');
         }).catch((ex) => {

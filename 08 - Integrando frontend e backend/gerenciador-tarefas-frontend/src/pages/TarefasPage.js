@@ -1,15 +1,19 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import moment from 'moment';
 import axios from 'axios';
-import { Table, Switch, Button } from 'antd';
+import { Table, Switch, Button, Modal } from 'antd';
+
+import TarefaForm from '../components/TarefaForm';
 
 const { Column } = Table;
 
-export default class TarefasPage extends Component {
+export default class TarefasPage extends PureComponent {
 
     state = {
-        tarefas: []
+        tarefas: [],
+        formVisible: false,
+        tarefaEdit: {}
     }
 
     componentDidMount() {
@@ -28,11 +32,98 @@ export default class TarefasPage extends Component {
             })
     }
 
+    onConcluidaChange = (tarefa, concluida) => {
+        let request;
+        if (concluida) {
+            request = axios.put(`/tarefas/concluida/${tarefa.id}`);
+        } else {
+            request = axios.delete(`/tarefas/concluida/${tarefa.id}`);
+        }
+        request
+            .then(response => {
+                tarefa.concluida = concluida;
+                const { tarefas } = this.state;
+                this.setState({
+                    tarefas: [...tarefas]
+                });
+            }).catch(ex => {
+                console.warn(ex);
+            })
+    }
+
+    onExcluirClick = (tarefa) => {
+        Modal.confirm({
+            title: `Deseja excluir a tarefa #${tarefa.id}?`,
+            okText: 'Sim',
+            onOk: () => this.excluirTarefa(tarefa),
+            cancelText: 'Não',
+            maskClosable: true
+        })
+    }
+
+    excluirTarefa = (tarefa) => {
+        axios.delete(`/tarefas/${tarefa.id}`)
+            .then(response => {
+                const { tarefas } = this.state;
+                const index = tarefas.findIndex(t => t.id === tarefa.id);
+                tarefas.splice(index, 1);
+                this.setState({
+                    tarefas: [...tarefas]
+                })
+            }).catch(ex => {
+                console.warn(ex);
+            })
+    }
+
+    onAdicionarClick = () => {
+        this.setState({
+            formVisible: true,
+            tarefaEdit: {}
+        })
+    }
+
+    onEditarClick = (tarefa) => {
+        this.setState({
+            formVisible: true,
+            tarefaEdit: tarefa
+        })
+    }
+
+    onFormCancelar = () => {
+        this.setState({
+            formVisible: false,
+        })
+    }
+
+    onFormSalvar = (tarefa) => {
+        if (tarefa.id) {
+            // editando
+        } else {
+            // cadastrando
+        }
+        this.setState({
+            formVisible: false,
+        })
+    }
+
     render() {
-        const { tarefas } = this.state;
+        const { tarefas, formVisible, tarefaEdit } = this.state;
         return (
             <div>
-                <Table dataSource={tarefas} >
+                <Button icon="plus" type="primary"
+                    onClick={this.onAdicionarClick}
+                >
+                    Adicionar tarefa
+                </Button>
+                <TarefaForm
+                    visible={formVisible}
+                    onCancelar={this.onFormCancelar}
+                    onSalvar={this.onFormSalvar}
+                    tarefa={tarefaEdit} />
+                <br />
+                <Table
+                    dataSource={tarefas}
+                    rowKey={tarefa => tarefa.id} >
                     <Column
                         key="id"
                         title="#"
@@ -56,17 +147,23 @@ export default class TarefasPage extends Component {
                         key="concluida"
                         title="Concluída"
                         dataIndex="concluida"
-                        render={(text) => (
-                            <Switch checked={text} />
+                        render={(text, tarefa) => (
+                            <Switch checked={text} onChange={(checked) => this.onConcluidaChange(tarefa, checked)} />
                         )}
                     />
                     <Column
                         key="acoes"
                         title="Ações"
-                        render={() => (
+                        render={(text, tarefa) => (
                             <Button.Group size="small">
-                                <Button icon="edit">Editar</Button>
-                                <Button type="danger" icon="delete">Excluir</Button>
+                                <Button icon="edit"
+                                    onClick={() => this.onEditarClick(tarefa)}
+                                >Editar</Button>
+                                <Button type="danger" icon="delete"
+                                    onClick={() => this.onExcluirClick(tarefa)}
+                                >
+                                    Excluir
+                                </Button>
                             </Button.Group>
                         )}
                     />

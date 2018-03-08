@@ -51,7 +51,7 @@ export default class InputForm extends Component {
 
     render() {
         const { valid } = this.state;
-        const { id, label, errorMessage, type, dateFormat } = this.props;
+        const { id, label, errorMessage, type, dateFormat, value } = this.props;
         const help = valid === false ? errorMessage : '';
         const validateStatus = valid === false ? 'error' : 'success';
 
@@ -64,7 +64,8 @@ export default class InputForm extends Component {
             );
         } else {
             input = (
-                <Input id={id} type={type} onChange={this.onChange} />
+                <Input id={id} type={type}
+                    onChange={this.onChange} value={value} />
             );
         }
 
@@ -78,4 +79,8 @@ export default class InputForm extends Component {
             </FormItem>
         );
     }
+}
+
+InputForm.defaultProps = {
+    validator: () => true
 }

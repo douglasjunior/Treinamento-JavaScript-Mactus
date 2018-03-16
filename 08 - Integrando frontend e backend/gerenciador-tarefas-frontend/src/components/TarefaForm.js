@@ -11,7 +11,7 @@ export default class TarefaForm extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            tarefa: nextProps.tarefa
+            tarefa: nextProps.tarefa || {}
         })
     }
 
@@ -68,7 +68,7 @@ export default class TarefaForm extends Component {
                             Cancelar
                         </Button>
                         {' '}
-                        <Button type="primary">
+                        <Button type="primary" htmlType="submit">
                             Salvar
                         </Button>
                     </Form.Item>

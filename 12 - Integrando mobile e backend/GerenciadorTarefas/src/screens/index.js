@@ -7,6 +7,7 @@ import { TouchableOpacity, View } from 'react-native';
 
 import Icon from '../components/Icon';
 import Drawer from '../components/Drawer';
+import Colors from '../values/Colors';
 
 import BemVindoScreen from './BemVindoScreen';
 import HomeScreen from './HomeScreen';
@@ -88,7 +89,14 @@ const StackPrincipal = StackNavigator({
             drawerLockMode: 'locked-closed',
         },
     },
-});
+}, {
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: Colors.primary,
+            },
+        },
+    }
+);
 
 const MenuDrawer = DrawerNavigator(
     {

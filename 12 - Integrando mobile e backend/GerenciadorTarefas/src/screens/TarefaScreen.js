@@ -1,9 +1,44 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+
+import axios from 'axios';
+import { NavigationActions } from 'react-navigation';
+
+import Button from '../components/Button';
+import TextInput from '../components/TextInput';
+import StatusBar from '../components/StatusBar';
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+    },
+    button: {
+        marginTop: 8
+    },
+    buttonContainer: {
+        marginLeft: 0,
+        marginRight: 0,
+    }
+});
 
 export default class TarefaScreen extends Component {
 
-    onFormSalvar = (tarefa) => {
+    state = {};
+
+    constructor(props) {
+        super(props);
+
+        if (props.navigation.state.params) {
+            this.state = {
+                ...props.navigation.state.params.tarefa
+            };
+        }
+    }
+
+    onFormSalvar = () => {
+        const tarefa = this.state;
         if (tarefa.id) {
             this.editarTarefa(tarefa);
         } else {
@@ -17,14 +52,8 @@ export default class TarefaScreen extends Component {
             descricao: tarefa.descricao,
         }).then(response => {
             const { data } = response;
-            const { tarefas } = this.state;
-            const index = tarefas.findIndex(t => t.id === tarefa.id);
-            tarefas.splice(index, 1, data);
-            this.setState({
-                tarefas: [...tarefas],
-                formVisible: false,
-                tarefaEdit: null,
-            });
+            this.props.navigation.goBack(null);
+            this.props.navigation.state.params.refresh();
         }).catch(ex => {
             console.warn(ex);
         });
@@ -36,20 +65,52 @@ export default class TarefaScreen extends Component {
             descricao: tarefa.descricao,
         }).then(response => {
             const { data } = response;
-            const { tarefas } = this.state;
-            tarefas.unshift(data);
-            this.setState({
-                tarefas: [...tarefas],
-                formVisible: false,
-            })
+            this.props.navigation.goBack(null);
+            this.props.navigation.state.params.refresh();
         }).catch(ex => {
             console.warn(ex);
         })
     }
 
+    onChange = (id, value) => {
+        this.setState({
+            [id]: value,
+        });
+    }
+
     render() {
+        const { titulo, descricao } = this.state;
         return (
-            <View />
+            <View style={styles.container}>
+                <StatusBar />
+
+                <TextInput
+                    id="titulo"
+                    ref="titulo"
+                    label="Título"
+                    value={titulo}
+                    validator={n => Boolean(n)}
+                    required
+                    errorMessage="Informe o título da tarefa."
+                    onChange={this.onChange}
+                />
+
+                <TextInput
+                    id="descricao"
+                    ref="descricao"
+                    label="Descrição"
+                    value={descricao}
+                    onChange={this.onChange}
+                />
+
+                <Button
+                    title="Salvar"
+                    onPress={this.onFormSalvar}
+                    buttonStyle={styles.button}
+                    containerViewStyle={styles.buttonContainer}
+                />
+
+            </View>
         );
     }
 

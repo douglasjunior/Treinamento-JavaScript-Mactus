@@ -37,6 +37,26 @@ const MenuButton = withNavigation((props) => {
     )
 });
 
+// const AddButton = withNavigation((props) => {
+//     const { navigation } = props;
+//     return (
+//         <View>
+//             <TouchableOpacity
+//                 onPress={() => navigation.navigate('Tarefa')}
+//             >
+//                 <View style={{ padding: 8 }}>
+//                     <Icon
+//                         family="MaterialIcons"
+//                         name="add"
+//                         size={32}
+//                         color="#000"
+//                     />
+//                 </View>
+//             </TouchableOpacity>
+//         </View>
+//     )
+// });
+
 const StackPrincipal = StackNavigator({
     Splash: {
         screen: SplashScreen,
@@ -73,6 +93,9 @@ const StackPrincipal = StackNavigator({
         navigationOptions: {
             title: 'Tarefas',
             drawerLockMode: 'locked-closed',
+            // headerRight: (
+            //     <AddButton />
+            // )
         },
     },
     Tarefa: {

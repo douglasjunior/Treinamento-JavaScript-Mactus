@@ -86,7 +86,7 @@ apply from: "../../node_modules/react-native/react.gradle"
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = false
+def enableSeparateBuildPerCPUArchitecture = true
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
@@ -96,6 +96,15 @@ def enableProguardInReleaseBuilds = false
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
+
+    signingConfigs {
+        config {
+            keyAlias 'mactus'
+            keyPassword 'senha123'
+            storeFile file('../keystores/certificado.jks')
+            storePassword 'senha123'
+        }
+    }
 
     defaultConfig {
         applicationId "com.projetoreactnavigation"
@@ -119,6 +128,10 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
     // applicationVariants are e.g. debug, release

@@ -22,13 +22,20 @@ const Touchable = (props) => {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#fff',
-        borderRadius: 2,
-        overflow: 'hidden',
+        // overflow: 'hidden',
         elevation: 2,
-        marginBottom: 16
+        marginBottom: 16,
+        shadowOffset: {
+            width: 2,
+            height: 2,
+        },
+        shadowRadius: 2,
+        shadowColor: 'rgb(0,0,0)',
+        shadowOpacity: 0.2,
     },
     content: {
+        backgroundColor: '#fff',
+        borderRadius: 2,
         padding: 16,
         backgroundColor: '#fff',
     },

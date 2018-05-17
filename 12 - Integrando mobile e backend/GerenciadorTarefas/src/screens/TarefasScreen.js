@@ -170,13 +170,13 @@ export default class TarefasScreen extends Component {
     }
 
     onScroll = (event) => {
-        if (event.nativeEvent.contentOffset.y === 0 && this.scrollDown) {
-            this.rolarParaCima();
-        } else if (event.nativeEvent.velocity.y > 0 && !this.scrollDown) {
-            this.rolarParaBaixo();
-        } else if (event.nativeEvent.velocity.y < 0 && this.scrollDown) {
-            this.rolarParaCima();
-        }
+        // if (event.nativeEvent.contentOffset.y === 0 && this.scrollDown) {
+        //     this.rolarParaCima();
+        // } else if (event.nativeEvent.velocity.y > 0 && !this.scrollDown) {
+        //     this.rolarParaBaixo();
+        // } else if (event.nativeEvent.velocity.y < 0 && this.scrollDown) {
+        //     this.rolarParaCima();
+        // }
     }
 
     renderFAB = () => {
